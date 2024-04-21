@@ -13,6 +13,7 @@ service People {
   rpc AddData (PersonRequest) returns (Reply) {}
   rpc GetData (Empty) returns (stream AllDataReply) {}
   rpc GetUser (UserRequest) returns (stream AllDataReplyUsers) {}
+  rpc GetUserNormal (UserRequestNormal) returns (stream AllDataReplyUsersNormal) {}
 }
 
 //adddata
@@ -47,4 +48,17 @@ message AllDataReplyUsers {
 
 message UserRequest {
   string name = 1;
+}
+
+//getuser cache normal
+message AllDataReplyUsersNormal {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  string city = 4;
+}
+
+message UserRequestNormal {
+  string name = 1;
+  string city = 2;
 }

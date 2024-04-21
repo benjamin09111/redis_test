@@ -61,6 +61,22 @@ function GetUser(call){
   });
 }
 
+function GetUserNormal(call){
+  const query = `SELECT id, name, age, city FROM people WHERE name = '${call.request.name}' AND city = '${call.request.city}';`;
+
+  //query a elephant
+  clientElephant.query(query)
+  .then(result => {
+    for(const data of result.rows){
+      call.write(data);
+    }
+    call.end();
+  })
+  .catch(err => {
+    console.error('Error al ejecutar la consulta', err);
+  });
+}
+
 const IP = process.env.GRPC_FULL_IP;
 const GRPC_PORT = process.env.GRPC_PORT
 
@@ -70,6 +86,7 @@ function main() {
     AddData: AddData,
     GetData: GetData,
     GetUser: GetUser,
+    GetUserNormal: GetUserNormal,
   });
 
   server.bindAsync(`${process.env.GRPC_FULL_IP}`, grpc.ServerCredentials.createInsecure(), () => {

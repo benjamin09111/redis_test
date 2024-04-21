@@ -1,14 +1,13 @@
 const { Client } = require('pg');
 const fs = require('fs');
 
-// Lee el archivo JSON
 const data = fs.readFileSync('./20kdata.json');
 const records = JSON.parse(data);
 
 const client = new Client({
     connectionString: 'postgres://xbpluecr:ocHjlBqYdHOKjQrjgiQ2SnPlROTXDqbA@otto.db.elephantsql.com/xbpluecr',
     ssl: {
-      rejectUnauthorized: false // Solo es necesario si tu base de datos requiere SSL
+        rejectUnauthorized: false
     }
 });
 
@@ -16,22 +15,27 @@ client.connect()
     .then(() => console.log('Conexión exitosa a la base de datos'))
     .catch(err => console.error('Error al conectar a la base de datos', err));
 
-//CAMBIAR ESTA COSAAA:
 
 async function insertRecords() {
+    let contador = 0;
     for (const record of records) {
-        const query = `INSERT INTO people (id, name, age, city) VALUES ($1, $2, $3, $4);`;
-        const values = [record.id, record.name, record.age, record.city];
+        if (contador == 5000) {
+            break;
+        } else {
+            const query = `INSERT INTO investors (id, name, money_invested, money_earned, city) VALUES ($1, $2, $3, $4, $5);`;
+            const values = [record.id, record.name, record.money_invested, record.money_earned, record.city];
 
-        try {
-            const result = await client.query(query, values);
-            console.log('Registro insertado en la base de datos:', record);
-        } catch (error) {
-            console.error('Error al ejecutar la consulta', error);
+            try {
+                const result = await client.query(query, values);
+                contador++;
+                console.log(`Registro insertado en la base de datos (${contador}):`, record);
+            } catch (error) {
+                console.error('Error al ejecutar la consulta', error);
+            }
         }
+
     }
 
-    // Cierra la conexión después de insertar todos los registros
     client.end();
 }
 

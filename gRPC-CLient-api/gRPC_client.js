@@ -1,7 +1,8 @@
-
+require('dotenv').config();
 var PROTO_PATH = './proto/demo.proto';
 var parseArgs = require('minimist');
 var grpc = require('@grpc/grpc-js');
+const CLIENT_FULL_IP_SERVER_GRPC = process.env.CLIENT_FULL_IP_SERVER_GRPC;
 var protoLoader = require('@grpc/proto-loader');
 var packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
@@ -20,7 +21,7 @@ var target;
 if (argv.target) {
   target = argv.target;
 } else {
-  target = 'localhost:50051';
+  target = `${CLIENT_FULL_IP_SERVER_GRPC}`;
 }
 var client = new demo_proto.People(target, grpc.credentials.createInsecure());
 var user;
