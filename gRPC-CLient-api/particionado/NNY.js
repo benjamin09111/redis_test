@@ -9,6 +9,11 @@ const connect = async () => {
 
     client.on("error", err => console.log("error redis: ", err))
 
+    await client.config("SET", "maxmemory", "10485760"); // 10 * 1024 * 1024 bytes
+
+    // Cambiar la política de eliminación a LFU
+    //await client.config("SET", "maxmemory-policy", "lfu");
+
     await client.connect();
 
     console.log("Redis conectado.");
