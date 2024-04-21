@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.demo";
+option java_outer_classname = "DEmoProto";
+option objc_class_prefix = "HLW";
+
+package demo;
+
+//mis procedimientos
+service People {
+  rpc AddData (PersonRequest) returns (Reply) {}
+  rpc GetData (Empty) returns (stream AllDataReply) {}
+  rpc GetUser (UserRequest) returns (stream AllDataReplyUsers) {}
+}
+
+//adddata
+message PersonRequest {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  string city = 4;
+}
+
+message Reply {
+  string message = 1;
+}
+
+//getdata
+message AllDataReply {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  string city = 4;
+}
+
+message Empty {}
+
+//getuser
+message AllDataReplyUsers {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  string city = 4;
+}
+
+message UserRequest {
+  string name = 1;
+}
