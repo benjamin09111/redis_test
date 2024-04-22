@@ -155,11 +155,15 @@ app.get("/normal/user/:name", cache, async (req, res) => {
 //tipos de redis LRU
 app.get("/normal/:name/:city", cache, async (req, res) => {
     const name = req.params.name;
-    const city = req.params.city;
+    var city = req.params.city;
     const key = `${name}_${city}`;
     const rows = [];
 
     const redisClient = await connectRedis();
+
+    if(city == "New_York"){
+        city = "New York"
+    }
 
     const userSearched = {
         "name": name,
@@ -190,12 +194,12 @@ app.get("/particionado/:name/:city", cacheParticionado, async (req, res) => {
     const key = `${name}_${city}`;
     const rows = [];
 
-    if (city == "New York") {
+    if (city == "New_York") {
         const redisClient = await connectRedisNewYork();
 
         const userSearched = {
             "name": name,
-            "city": city
+            "city": "New York"
         }
 
         const call = client.GetUserNormal(userSearched);
